@@ -12,6 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
+import androidx.navigation.compose.rememberNavController
 
 import com.example.foundit.ui.theme.FoundItTheme
 
@@ -22,12 +26,33 @@ class MainActivity : ComponentActivity() {
             FoundItTheme {
                 // A surface container using the 'background' color from the theme
 
+
                 Surface(
 
                     modifier = Modifier.fillMaxSize(),
 
-                ) {
-                    OnboardingScreen()
+                    ) {
+                    val navController = rememberNavController()
+
+                    NavHost(navController = navController, startDestination = "onboarding") {
+                        navigation(
+                            startDestination = "onboarding_screen",
+                            route = "onboarding"
+                        ) {
+                            composable("onboarding_screen") {
+                                OnboardingScreen(navController)
+                            }
+                        }
+
+                        navigation(
+                            startDestination = "login",
+                            route = "auth"
+                        ) {
+                            composable("login") {
+                                LoginScreen()
+                            }
+                        }
+                    }
                 }
             }
         }
