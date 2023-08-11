@@ -1,4 +1,4 @@
-package com.example.foundit
+package com.example.foundit.features.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.foundit.R
 
 
 @Composable
