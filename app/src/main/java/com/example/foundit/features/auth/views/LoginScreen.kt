@@ -36,11 +36,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.foundit.R
+import com.example.foundit.features.auth.viewmodels.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    viewModel : LoginViewModel = LoginViewModel()
+) {
     var email by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
