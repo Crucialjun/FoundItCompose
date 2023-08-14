@@ -21,7 +21,9 @@ import com.example.foundit.features.auth.views.SignupScreen
 import com.example.foundit.features.onboarding.OnboardingScreen
 
 import com.example.foundit.ui.theme.FoundItTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

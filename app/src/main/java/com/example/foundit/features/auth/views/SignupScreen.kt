@@ -35,18 +35,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.foundit.R
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
+import com.example.foundit.features.auth.viewmodels.RegisterViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
 fun SignupScreen(
+
     navController: NavController
 ) {
     var email by remember { mutableStateOf("") }
+    val viewmodel : RegisterViewModel = hiltViewModel()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,48 +74,25 @@ fun SignupScreen(
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 28.sp)
         )
         Spacer(Modifier.height(16.dp))
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            Button(
-                onClick = {}, modifier = Modifier
-                    .height(48.dp)
-                    .weight(1f), shape = RoundedCornerShape(8.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Continue with ", style = TextStyle(fontWeight = FontWeight.Bold))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        painter = painterResource(id = R.drawable.google),
-                        contentDescription = "Google",
-                    )
-
-                }
-
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                onClick = {}, modifier = Modifier
-
-                    .height(48.dp), shape = RoundedCornerShape(8.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.apple),
-                        contentDescription = "Google",
-                    )
-
-                }
-
-            }
-
-        }
-        Spacer(Modifier.height(32.dp))
-        Text("Or use email", style = TextStyle(fontWeight = FontWeight.W400, fontSize = 16.sp), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
-        Spacer(Modifier.height(32.dp))
         OutlinedTextField(
-            value = email,
+            value = viewmodel.username,
             onValueChange = {
-                email = it
+                viewmodel.updateUsername(it)
+            },
+            label = { Text("Username") },
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = Color.Gray
+            )
+        )
+        Spacer(modifier =  Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = viewmodel.email,
+            onValueChange = {
+                viewmodel.updateEmail(it)
             },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
@@ -119,12 +102,29 @@ fun SignupScreen(
                 unfocusedBorderColor = Color.Gray
             )
         )
+        Spacer(modifier =  Modifier.height(8.dp))
         OutlinedTextField(
-            value = email,
+            value = viewmodel.password,
             onValueChange = {
-                email = it
+                viewmodel.updatePassword(it)
             },
             label = { Text("Password") },
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = Color.Gray,
+
+
+                )
+        )
+        Spacer(modifier =  Modifier.height(8.dp))
+        OutlinedTextField(
+            value = viewmodel.confirmPassword,
+            onValueChange = {
+                viewmodel.updateConfirmPassword(it)
+            },
+            label = { Text("Confirm Password") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -150,11 +150,11 @@ fun SignupScreen(
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
-                "Don't have an account? ",
+                "Already have an account? ",
                 style = TextStyle(fontWeight = FontWeight.W400, fontSize = 16.sp)
             )
             Text(
-                " Register Now",
+                " Sign in",
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp),
                 textAlign = TextAlign.Center,
 
