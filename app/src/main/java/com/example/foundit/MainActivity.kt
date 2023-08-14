@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.foundit.features.auth.views.LoginScreen
+import com.example.foundit.features.auth.views.SignupScreen
 import com.example.foundit.features.onboarding.OnboardingScreen
 
 import com.example.foundit.ui.theme.FoundItTheme
@@ -51,7 +52,10 @@ class MainActivity : ComponentActivity() {
                             route = "auth"
                         ) {
                             composable("login") {
-                                LoginScreen()
+                                LoginScreen(navController)
+                            }
+                            composable("register") {
+                                SignupScreen(navController)
                             }
                         }
                     }

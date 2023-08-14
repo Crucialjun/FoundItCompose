@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -38,13 +36,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.example.foundit.R
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun LoginScreen(
+fun SignupScreen(
     navController: NavController
 ) {
     var email by remember { mutableStateOf("") }
@@ -65,7 +64,7 @@ fun LoginScreen(
         )
         Spacer(Modifier.height(64.dp))
         Text(
-            "Log in to FoundIt!",
+            "Register to FoundIt!",
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 28.sp)
         )
         Spacer(Modifier.height(16.dp))
@@ -105,12 +104,7 @@ fun LoginScreen(
 
         }
         Spacer(Modifier.height(32.dp))
-        Text(
-            "Or use email",
-            style = TextStyle(fontWeight = FontWeight.W400, fontSize = 16.sp),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
+        Text("Or use email", style = TextStyle(fontWeight = FontWeight.W400, fontSize = 16.sp), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
         Spacer(Modifier.height(32.dp))
         OutlinedTextField(
             value = email,
@@ -159,14 +153,12 @@ fun LoginScreen(
                 "Don't have an account? ",
                 style = TextStyle(fontWeight = FontWeight.W400, fontSize = 16.sp)
             )
-            ClickableText(
-                text = AnnotatedString(" Register Now"),
-                onClick = {
-                    navController.navigate("register")
-                },
-                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground),
-            )
+            Text(
+                " Register Now",
+                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp),
+                textAlign = TextAlign.Center,
 
+                )
         }
     }
 }
