@@ -1,5 +1,10 @@
 package com.example.foundit.features.auth.views
 
+import android.app.Activity.RESULT_OK
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,9 +45,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import arrow.core.Either
 import com.example.foundit.R
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
 import com.example.foundit.features.auth.viewmodels.RegisterViewModel
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,9 +59,24 @@ import com.example.foundit.features.auth.viewmodels.RegisterViewModel
 fun SignupScreen(
 
     navController: NavController
-) {
+)  {
     var email by remember { mutableStateOf("") }
     val viewmodel : RegisterViewModel = hiltViewModel()
+    val coroutineScope = rememberCoroutineScope()
+    val intentRequestState = viewmodel.intentRequestState.value
+
+
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = { result ->
+           if(result.resultCode == RESULT_OK){
+               coroutineScope.launch {
+                   viewmodel.signInWithIntent(result.data ?: return@launch);
+               }
+           }
+        }
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -136,7 +160,18 @@ fun SignupScreen(
         )
         Spacer(Modifier.height(12.dp))
         Button(
-            onClick = {}, modifier = Modifier
+            onClick = {
+                      coroutineScope.launch {
+                          viewmodel.loginWithGoogle()
+                          launcher.launch(
+                              IntentSenderRequest.Builder(
+                                  intentRequestState.intentSender ?: return@launch
+
+                              ).build()
+                          )
+
+                      }
+            }, modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp), shape = RoundedCornerShape(8.dp)
         ) {

@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+
 
 private val DarkColorScheme = darkColorScheme(
     primary = MainAppColorDark,
@@ -49,7 +49,7 @@ fun FoundItTheme(
 
     content: @Composable () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
