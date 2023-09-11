@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">733567715373-6c6uoa8nutgghj1o8547mh3jt17ufv68.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">733567715373</string>
+    <string name="google_api_key" translatable="false">AIzaSyCraw4c-Ux6fb76KMf0pkyztdOae89YnnI</string>
+    <string name="google_app_id" translatable="false">1:733567715373:android:ad01e223c7ecd4674e90a4</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCraw4c-Ux6fb76KMf0pkyztdOae89YnnI</string>
+    <string name="google_storage_bucket" translatable="false">foundit-d27d8.appspot.com</string>
+    <string name="project_id" translatable="false">foundit-d27d8</string>
+</resources>
