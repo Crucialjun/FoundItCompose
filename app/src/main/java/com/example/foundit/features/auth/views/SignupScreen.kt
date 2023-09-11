@@ -1,6 +1,7 @@
 package com.example.foundit.features.auth.views
 
 import android.app.Activity.RESULT_OK
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContract
@@ -33,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +51,7 @@ import arrow.core.Either
 import com.example.foundit.R
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
 import com.example.foundit.features.auth.viewmodels.RegisterViewModel
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
@@ -64,6 +67,7 @@ fun SignupScreen(
     val viewmodel : RegisterViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
     val intentRequestState = viewmodel.intentRequestState.value
+    val oneTapClient = Identity.getSignInClient(LocalContext.current)
 
 
 
@@ -72,7 +76,7 @@ fun SignupScreen(
         onResult = { result ->
            if(result.resultCode == RESULT_OK){
                coroutineScope.launch {
-                   viewmodel.signInWithIntent(result.data ?: return@launch);
+                   viewmodel.signInWithIntent(result.data ?: return@launch, oneTapClient);
                }
            }
         }
@@ -161,8 +165,9 @@ fun SignupScreen(
         Spacer(Modifier.height(12.dp))
         Button(
             onClick = {
+                Log.d("TAG", "SignupScreen: clicked")
                       coroutineScope.launch {
-                          viewmodel.loginWithGoogle()
+                          viewmodel.loginWithGoogle(oneTapClient)
                           launcher.launch(
                               IntentSenderRequest.Builder(
                                   intentRequestState.intentSender ?: return@launch
@@ -175,7 +180,7 @@ fun SignupScreen(
                 .fillMaxWidth()
                 .height(48.dp), shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Sign In", style = TextStyle(fontWeight = FontWeight.Bold))
+            Text("Sign In2", style = TextStyle(fontWeight = FontWeight.Bold))
 
         }
         Spacer(Modifier.height(32.dp))

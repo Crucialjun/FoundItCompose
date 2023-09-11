@@ -4,9 +4,11 @@ import android.content.Intent
 import android.content.IntentSender
 import arrow.core.Either
 import com.example.foundit.core.app.models.Failure
+import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseUser
 
 interface AuthRepository {
-    suspend fun loginWithGoogle(): IntentSender?
-    suspend fun signInWithIntent(intent: Intent): Either<Failure, FirebaseUser?>
+    suspend fun loginWithGoogle(oneTap : SignInClient): IntentSender?
+    suspend fun signInWithIntent(params: LoginWithIntentParams): Either<Failure, FirebaseUser?>
 }

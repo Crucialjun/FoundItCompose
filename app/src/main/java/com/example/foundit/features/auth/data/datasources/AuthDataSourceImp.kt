@@ -10,6 +10,7 @@ import arrow.core.Either
 
 import com.example.foundit.R
 import com.example.foundit.core.app.models.Failure
+import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -24,13 +25,12 @@ import javax.inject.Inject
 
 class AuthDataSourceImp @Inject constructor(
     private val context: Context,
-    private val oneTapClient: SignInClient
 ) : AuthDataSource {
 
     private val auth = FirebaseAuth.getInstance()
 
 
-    override suspend fun loginWithGoogle(): IntentSender? {
+    override suspend fun loginWithGoogle(oneTapClient: SignInClient): IntentSender? {
         val result = try {
             oneTapClient.beginSignIn(buildGoogleSignInRequest()).await()
         } catch (e: Exception) {
@@ -42,7 +42,7 @@ class AuthDataSourceImp @Inject constructor(
 
     override suspend fun signOut() {
         try {
-            oneTapClient.signOut().await()
+            //oneTapClient.signOut().await()
             auth.signOut()
         } catch (e: Exception) {
             print(e.toString())
@@ -56,8 +56,8 @@ class AuthDataSourceImp @Inject constructor(
 
 
     override
-    suspend fun signInWithIntent(intent: Intent): Either<Failure, FirebaseUser?> {
-        val credential = oneTapClient.getSignInCredentialFromIntent(intent)
+    suspend fun signInWithIntent(params: LoginWithIntentParams): Either<Failure, FirebaseUser?> {
+        val credential = params.oneTap.getSignInCredentialFromIntent(params.intentSender)
         val googleIdToken = credential.googleIdToken
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
         return try {

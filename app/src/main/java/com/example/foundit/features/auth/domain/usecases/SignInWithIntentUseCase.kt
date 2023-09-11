@@ -5,6 +5,7 @@ import com.example.foundit.core.app.NoParams
 import com.example.foundit.core.app.UseCases
 import com.example.foundit.core.app.models.Resource
 import com.example.foundit.features.auth.data.repository.AuthRepository
+import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.features.auth.states.IntentRequestState
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
@@ -13,8 +14,8 @@ import javax.inject.Inject
 
 class SignInWithIntentUseCase @Inject constructor(
     private val authRepository: AuthRepository
-) : UseCases<FirebaseUser?, Intent>{
-    override fun invoke(params: Intent): Flow<Resource<FirebaseUser?>> {
+) : UseCases<FirebaseUser?, LoginWithIntentParams>{
+    override fun invoke(params: LoginWithIntentParams): Flow<Resource<FirebaseUser?>> {
         return flow{
             emit(Resource.Loading())
             try{

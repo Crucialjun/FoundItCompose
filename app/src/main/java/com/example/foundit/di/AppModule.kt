@@ -29,10 +29,9 @@ class AppModule {
     fun provideAuthDataSource(
         @ApplicationContext
         context: Context,
-        oneTapClient : SignInClient
     ): AuthDataSource {
         return AuthDataSourceImp(
-            context,oneTapClient
+            context
         )
     }
 }

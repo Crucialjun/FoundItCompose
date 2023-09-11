@@ -12,10 +12,12 @@ import arrow.core.left
 import com.example.foundit.core.app.NoParams
 import com.example.foundit.core.app.models.Failure
 import com.example.foundit.core.app.models.Resource
+import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.features.auth.domain.usecases.LoginWithGoogleUseCase
 import com.example.foundit.features.auth.domain.usecases.SignInWithIntentUseCase
 import com.example.foundit.features.auth.states.IntentRequestState
 import com.example.foundit.features.auth.states.SignInState
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -48,9 +50,9 @@ class RegisterViewModel @Inject constructor (
 
 
 
-    suspend fun loginWithGoogle(){
+    suspend fun loginWithGoogle(oneTap :SignInClient){
 
-        val intentSender = loginWithGoogleUseCase(NoParams()).onEach {
+        val intentSender = loginWithGoogleUseCase(oneTap).onEach {
             when (it) {
                 is Resource.Success -> {
                     _intentRequestState.value = IntentRequestState(intentSender = it.data)
@@ -72,8 +74,13 @@ class RegisterViewModel @Inject constructor (
         }
     }
 
-    suspend fun signInWithIntent(intent: Intent){
-        val res = signInWithIntentUseCase(intent).onEach {
+    suspend fun signInWithIntent(intent: Intent,oneTap: SignInClient){
+        val res = signInWithIntentUseCase(
+            LoginWithIntentParams(
+                intentSender = intent,
+                oneTap = oneTap
+            )
+        ).onEach {
             when (it) {
                 is Resource.Success -> {
 
