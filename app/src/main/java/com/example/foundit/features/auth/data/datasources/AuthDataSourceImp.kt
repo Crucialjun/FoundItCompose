@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.res.Resources
+import android.util.Log
 import androidx.compose.ui.res.stringResource
 import arrow.core.Either
 
@@ -34,6 +35,7 @@ class AuthDataSourceImp @Inject constructor(
         val result = try {
             oneTapClient.beginSignIn(buildGoogleSignInRequest()).await()
         } catch (e: Exception) {
+            Log.e("TAG", "loginWithGoogle: Data source error is ${e.toString()} ", )
             if (e is CancellationException) throw e else return null
         }
 
@@ -75,7 +77,7 @@ class AuthDataSourceImp @Inject constructor(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
                     .setServerClientId(
-                        Resources.getSystem().getString(R.string.default_web_client_id)
+                     "733567715373-6c6uoa8nutgghj1o8547mh3jt17ufv68.apps.googleusercontent.com"
                     )
                     .setFilterByAuthorizedAccounts(false)
                     .build()

@@ -66,21 +66,11 @@ fun SignupScreen(
     var email by remember { mutableStateOf("") }
     val viewmodel : RegisterViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
-    val intentRequestState = viewmodel.intentRequestState.value
-    val oneTapClient = Identity.getSignInClient(LocalContext.current)
 
 
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult(),
-        onResult = { result ->
-           if(result.resultCode == RESULT_OK){
-               coroutineScope.launch {
-                   viewmodel.signInWithIntent(result.data ?: return@launch, oneTapClient);
-               }
-           }
-        }
-    )
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -165,17 +155,7 @@ fun SignupScreen(
         Spacer(Modifier.height(12.dp))
         Button(
             onClick = {
-                Log.d("TAG", "SignupScreen: clicked")
-                      coroutineScope.launch {
-                          viewmodel.loginWithGoogle(oneTapClient)
-                          launcher.launch(
-                              IntentSenderRequest.Builder(
-                                  intentRequestState.intentSender ?: return@launch
 
-                              ).build()
-                          )
-
-                      }
             }, modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp), shape = RoundedCornerShape(8.dp)

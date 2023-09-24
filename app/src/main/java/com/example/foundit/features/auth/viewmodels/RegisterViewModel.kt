@@ -30,8 +30,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor (
-    private val loginWithGoogleUseCase: LoginWithGoogleUseCase,
-    private val signInWithIntentUseCase: SignInWithIntentUseCase
+
 ) : ViewModel(){
     var username by mutableStateOf("")
         private  set
@@ -42,91 +41,14 @@ class RegisterViewModel @Inject constructor (
     var confirmPassword by mutableStateOf("")
         private  set
 
-    private val _state = MutableStateFlow(SignInState())
-    val state = _state.asStateFlow()
-
-    private val _intentRequestState = mutableStateOf(IntentRequestState())
-    val intentRequestState : State<IntentRequestState> = _intentRequestState
 
 
 
-    suspend fun loginWithGoogle(oneTap :SignInClient){
-
-        val intentSender = loginWithGoogleUseCase(oneTap).onEach {
-            when (it) {
-                is Resource.Success -> {
-                    _intentRequestState.value = IntentRequestState(intentSender = it.data)
-                }
-
-                is Resource.Error -> {
-                    _intentRequestState.value =
-                        IntentRequestState(error = it.message ?: "An error occurred")
-                }
-
-                is Resource.Loading -> {
-                    _intentRequestState.value = IntentRequestState(isLoading = true)
-                }
-
-                else -> {
-
-                }
-            }
-        }
-    }
-
-    suspend fun signInWithIntent(intent: Intent,oneTap: SignInClient){
-        val res = signInWithIntentUseCase(
-            LoginWithIntentParams(
-                intentSender = intent,
-                oneTap = oneTap
-            )
-        ).onEach {
-            when (it) {
-                is Resource.Success -> {
-
-                }
-
-                is Resource.Error -> {
-
-                }
-
-                is Resource.Loading -> {
-
-                }
-
-                else -> {
-
-                }
-            }
-        }
-    }
 
 
-        fun onSignInResult(result: Either<Failure, FirebaseUser?>) {
-            _state.update {
-                it.copy(
-                    isLoading = false,
-                    error = result.fold(
-                        ifLeft = { failure -> failure.toString() },
-                        ifRight = { null }
-                    ),
-                    isSignInSuccess = result.fold(
-                        ifLeft = { false },
-                        ifRight = { true }
-                    )
-                )
 
-            }
 
-            when (result) {
-                is Either.Left -> SignInState(error = result.value.toString())
-                is Either.Right -> SignInState(isSignInSuccess = true)
-            }
-        }
 
-        fun resetState() {
-            _state.update { SignInState() }
-        }
 
 
         fun updateUsername(username: String) {
