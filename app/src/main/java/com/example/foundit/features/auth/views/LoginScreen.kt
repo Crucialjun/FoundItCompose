@@ -1,10 +1,7 @@
 package com.example.foundit.features.auth.views
 
-import android.app.Activity
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
+import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +40,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,30 +47,33 @@ import androidx.navigation.NavController
 import com.example.foundit.R
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
 import com.google.android.gms.auth.api.identity.Identity
+import com.orhanobut.logger.Logger
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
 fun LoginScreen(
-    navController: NavController
-) {
+    navController: NavController,
+    onSignInWithGoogleClick : () -> Unit,
+
+    ) {
+    val context = LocalContext.current
+    
+
     var email by remember { mutableStateOf("") }
     val viewmodel: LoginViewModel = hiltViewModel()
-    val coroutineScope = rememberCoroutineScope()
     val intentRequestState by viewmodel.intentRequestState
-    val oneTapClient = Identity.getSignInClient(LocalContext.current)
+    val signInWithGoogleState by viewmodel.signInWithGoogleState.collectAsState()
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult(),
-        onResult = { result ->
-            if(result.resultCode == Activity.RESULT_OK){
-                coroutineScope.launch {
-                    viewmodel.signInWithIntent(result.data ?: return@launch, oneTapClient);
-                }
-            }
-        }
-    )
+
+    LaunchedEffect(key1 = signInWithGoogleState ){
+            Toast.makeText(context, "Sign in Success", Toast.LENGTH_LONG).show()
+
+    }
+
+
 
 
 
@@ -102,17 +102,9 @@ fun LoginScreen(
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Button(
                 onClick = {
-                    Log.d("TAG", "SignupScreen: clicked")
-                    coroutineScope.launch {
-                        viewmodel.loginWithGoogle(oneTapClient)
-                        launcher.launch(
-                            IntentSenderRequest.Builder(
-                                intentRequestState.intentSender ?: return@launch
+                   onSignInWithGoogleClick()
 
-                            ).build()
-                        )
 
-                    }
                 }, modifier = Modifier
                     .height(48.dp)
                     .weight(1f), shape = RoundedCornerShape(8.dp)

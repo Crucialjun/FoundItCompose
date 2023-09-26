@@ -21,7 +21,7 @@ class LoginWithGoogleUseCase @Inject constructor(
             emit(Resource.Loading())
             try {
                 val intentSender = authRepository.loginWithGoogle(params)
-                Log.e("TAG", "sign in with google invoke: intentSender = ${intentSender}", )
+
                 emit(Resource.Success(intentSender))
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "An error occurred"))

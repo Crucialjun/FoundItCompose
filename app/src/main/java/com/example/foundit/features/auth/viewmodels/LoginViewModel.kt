@@ -13,9 +13,10 @@ import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.features.auth.domain.usecases.LoginWithGoogleUseCase
 import com.example.foundit.features.auth.domain.usecases.SignInWithIntentUseCase
 import com.example.foundit.features.auth.states.IntentRequestState
-import com.example.foundit.features.auth.states.SignInState
+import com.example.foundit.features.auth.states.SignInWithGoogleState
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseUser
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,8 +31,8 @@ class LoginViewModel @Inject constructor (
     private val signInWithIntentUseCase: SignInWithIntentUseCase
 ) : ViewModel(){
 
-    private val _state = MutableStateFlow(SignInState())
-    val state = _state.asStateFlow()
+    private val _signInWithGoogleState = MutableStateFlow(SignInWithGoogleState())
+    val signInWithGoogleState = _signInWithGoogleState.asStateFlow()
 
     private val _intentRequestState = mutableStateOf(IntentRequestState())
     val intentRequestState : State<IntentRequestState> = _intentRequestState
@@ -39,41 +40,38 @@ class LoginViewModel @Inject constructor (
 
     suspend fun loginWithGoogle(oneTap :SignInClient){
         Log.d("TAG", "Login with google called")
-        val intentSender = loginWithGoogleUseCase(oneTap).onEach {
+        loginWithGoogleUseCase(oneTap).onEach {
             when (it) {
                 is Resource.Success -> {
-                    Log.e("TAG", "loginWithGoogle:Success... result is ${it.data}", )
+                    Logger.d("Login with google Success")
                     _intentRequestState.value = IntentRequestState(intentSender = it.data)
                 }
 
                 is Resource.Error -> {
-                    Log.e("TAG", "loginWithGoogle:Error is ${it.message} ", )
+                    Logger.e("Login with google Error, error is ${it.message}")
                     _intentRequestState.value =
                         IntentRequestState(error = it.message ?: "An error occurred")
                 }
 
                 is Resource.Loading -> {
-                    Log.e("TAG", "loginWithGoogle:Loading... ", )
+                    Logger.d("Login with google loading")
                     _intentRequestState.value = IntentRequestState(isLoading = true)
                 }
 
-                else -> {
-
-                }
             }
         }.launchIn(viewModelScope)
     }
 
     suspend fun signInWithIntent(intent: Intent, oneTap: SignInClient){
-        val res = signInWithIntentUseCase(
+        signInWithIntentUseCase(
             LoginWithIntentParams(
-                intentSender = intent,
+                intent = intent,
                 oneTap = oneTap
             )
         ).onEach {
             when (it) {
                 is Resource.Success -> {
-
+                   _signInWithGoogleState.value = SignInWithGoogleState(isSignInSuccess = true)
                 }
 
                 is Resource.Error -> {
@@ -81,18 +79,15 @@ class LoginViewModel @Inject constructor (
                 }
 
                 is Resource.Loading -> {
-
+                    Logger.d("Loading")
                 }
 
-                else -> {
-
-                }
             }
         }.launchIn(viewModelScope)
     }
 
     fun onSignInResult(result: Either<Failure, FirebaseUser?>) {
-        _state.update {
+        _signInWithGoogleState.update {
             it.copy(
                 isLoading = false,
                 error = result.fold(
@@ -108,8 +103,14 @@ class LoginViewModel @Inject constructor (
         }
 
         when (result) {
-            is Either.Left -> SignInState(error = result.value.toString())
-            is Either.Right -> SignInState(isSignInSuccess = true)
+            is Either.Left -> SignInWithGoogleState(error = result.value.toString())
+            is Either.Right -> SignInWithGoogleState(isSignInSuccess = true)
+        }
+    }
+
+    fun resetState(){
+        _signInWithGoogleState.update {
+            SignInWithGoogleState()
         }
     }
 }

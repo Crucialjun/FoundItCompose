@@ -1,21 +1,14 @@
 package com.example.foundit.features.auth.data.datasources
 
 
-import android.content.Context
-import android.content.Intent
 import android.content.IntentSender
-import android.content.res.Resources
 import android.util.Log
-import androidx.compose.ui.res.stringResource
 import arrow.core.Either
 
-import com.example.foundit.R
 import com.example.foundit.core.app.models.Failure
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -25,18 +18,17 @@ import javax.inject.Inject
 
 
 class AuthDataSourceImp @Inject constructor(
-    private val context: Context,
 ) : AuthDataSource {
 
     private val auth = FirebaseAuth.getInstance()
 
 
-    override suspend fun loginWithGoogle(oneTapClient: SignInClient): IntentSender? {
+    override suspend fun loginWithGoogle(oneTap: SignInClient): IntentSender? {
         val result = try {
-            oneTapClient.beginSignIn(buildGoogleSignInRequest()).await()
+            oneTap.beginSignIn(buildGoogleSignInRequest()).await()
         } catch (e: Exception) {
-            Log.e("TAG", "loginWithGoogle: Data source error is ${e.toString()} ", )
-            if (e is CancellationException) throw e else return null
+            throw e
+
         }
 
         return result.pendingIntent.intentSender
@@ -59,13 +51,15 @@ class AuthDataSourceImp @Inject constructor(
 
     override
     suspend fun signInWithIntent(params: LoginWithIntentParams): Either<Failure, FirebaseUser?> {
-        val credential = params.oneTap.getSignInCredentialFromIntent(params.intentSender)
+        val credential = params.oneTap.getSignInCredentialFromIntent(params.intent)
         val googleIdToken = credential.googleIdToken
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
         return try {
             val user = auth.signInWithCredential(googleCredentials).await().user
+
             Either.Right(user)
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Either.Left(Failure(e.toString()))
         }
     }

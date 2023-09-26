@@ -16,7 +16,6 @@ import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.features.auth.domain.usecases.LoginWithGoogleUseCase
 import com.example.foundit.features.auth.domain.usecases.SignInWithIntentUseCase
 import com.example.foundit.features.auth.states.IntentRequestState
-import com.example.foundit.features.auth.states.SignInState
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel

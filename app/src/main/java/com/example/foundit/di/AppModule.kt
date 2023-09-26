@@ -27,11 +27,10 @@ class AppModule {
     @Provides
     @Singleton
     fun provideAuthDataSource(
-        @ApplicationContext
-        context: Context,
+
     ): AuthDataSource {
         return AuthDataSourceImp(
-            context
+
         )
     }
 }
