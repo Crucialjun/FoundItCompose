@@ -91,6 +91,9 @@ dependencies {
     //logger
     implementation ("com.orhanobut:logger:2.2.0")
 
+    //coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
 
 
 

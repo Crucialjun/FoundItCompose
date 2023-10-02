@@ -23,7 +23,7 @@ class AuthDataSourceImp @Inject constructor(
     private val auth = FirebaseAuth.getInstance()
 
 
-    override suspend fun loginWithGoogle(oneTap: SignInClient): IntentSender? {
+    override suspend fun loginWithGoogle(oneTap: SignInClient): IntentSender {
         val result = try {
             oneTap.beginSignIn(buildGoogleSignInRequest()).await()
         } catch (e: Exception) {

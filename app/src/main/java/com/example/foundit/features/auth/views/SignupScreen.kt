@@ -148,8 +148,7 @@ fun SignupScreen(
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = Color.Gray,
-
-
+                
                 )
         )
         Spacer(Modifier.height(12.dp))
