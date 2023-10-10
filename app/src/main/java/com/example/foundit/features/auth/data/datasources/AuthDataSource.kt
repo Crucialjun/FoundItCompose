@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.IntentSender
 import arrow.core.Either
 import com.example.foundit.R
+import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -16,7 +17,7 @@ interface AuthDataSource {
 
     suspend fun getSignedInUser(): FirebaseUser?
 
-    suspend fun signInWithIntent(params: LoginWithIntentParams): Either<Failure, FirebaseUser?>
+    suspend fun signInWithIntent(params: LoginWithIntentParams): AppUser
 
 
 

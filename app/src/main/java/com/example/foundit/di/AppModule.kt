@@ -5,6 +5,8 @@ import com.example.foundit.features.auth.data.datasources.AuthDataSource
 import com.example.foundit.features.auth.data.datasources.AuthDataSourceImp
 import com.example.foundit.features.auth.data.repository.AuthRepository
 import com.example.foundit.features.auth.data.repository.AuthRepositoryImp
+import com.example.foundit.services.auth_service.AuthService
+import com.example.foundit.services.auth_service.AuthServiceImpl
 import com.google.android.gms.auth.api.identity.SignInClient
 import dagger.Module
 import dagger.Provides
@@ -27,10 +29,17 @@ class AppModule {
     @Provides
     @Singleton
     fun provideAuthDataSource(
-
+        authService: AuthService
     ): AuthDataSource {
         return AuthDataSourceImp(
-
+            authService
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthService(
+    ): AuthService {
+        return AuthServiceImpl()
     }
 }

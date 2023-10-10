@@ -4,9 +4,12 @@ package com.example.foundit.features.auth.data.datasources
 import android.content.IntentSender
 import android.util.Log
 import arrow.core.Either
+import com.example.foundit.core.app.models.AppUser
 
 import com.example.foundit.core.app.models.Failure
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
+import com.example.foundit.services.auth_service.AuthService
+import com.example.foundit.services.db_service.DbService
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
@@ -18,67 +21,62 @@ import javax.inject.Inject
 
 
 class AuthDataSourceImp @Inject constructor(
+    private val authService : AuthService,
+    private val dbService: DbService
 ) : AuthDataSource {
 
-    private val auth = FirebaseAuth.getInstance()
+
 
 
     override suspend fun loginWithGoogle(oneTap: SignInClient): IntentSender {
-        val result = try {
-            oneTap.beginSignIn(buildGoogleSignInRequest()).await()
+        return try {
+            authService.loginWithGoogle(oneTap)
         } catch (e: Exception) {
+            print(e.toString())
             throw e
-
         }
-
-        return result.pendingIntent.intentSender
     }
 
     override suspend fun signOut() {
         try {
             //oneTapClient.signOut().await()
-            auth.signOut()
+            authService.signOut()
         } catch (e: Exception) {
             print(e.toString())
-            if (e is CancellationException) throw e
+             throw e
         }
     }
 
     override suspend fun getSignedInUser(): FirebaseUser? {
-        return auth.currentUser
-    }
-
-
-    override
-    suspend fun signInWithIntent(params: LoginWithIntentParams): Either<Failure, FirebaseUser?> {
-        val credential = params.oneTap.getSignInCredentialFromIntent(params.intent)
-        val googleIdToken = credential.googleIdToken
-        val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
-        return try {
-            val user = auth.signInWithCredential(googleCredentials).await().user
-
-            Either.Right(user)
-        } catch (e: Exception) {
-            if (e is CancellationException) throw e
-            Either.Left(Failure(e.toString()))
+        try {
+            return authService.getSignedInUser()
+        }catch (e: Exception) {
+            print(e.toString())
+            throw e
         }
     }
 
 
-    private fun buildGoogleSignInRequest(): BeginSignInRequest {
-        return BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setServerClientId(
-                     "733567715373-6c6uoa8nutgghj1o8547mh3jt17ufv68.apps.googleusercontent.com"
-                    )
-                    .setFilterByAuthorizedAccounts(false)
-                    .build()
-            )
-            .setAutoSelectEnabled(true)
-            .build()
-    }
+    override
+    suspend fun signInWithIntent(params: LoginWithIntentParams): AppUser {
+        try{
+            val firebaseUser = authService.signInWithIntent(params)
+           val appUser : AppUser = AppUser(
+               firebaseUser!!.uid,
+               firebaseUser.displayName ?: "",
+               firebaseUser.email ?: "",
+               firebaseUser.photoUrl.toString())
+
+dbService.addAppUserToDb(appUser)
+
+            return appUser;
+       }catch (e: Exception){
+           print(e.toString())
+           throw e
+    }}
+
+
+
 
     //private val googleSignInClient = GoogleSignIn.getClient( gso)
 

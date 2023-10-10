@@ -51,6 +51,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "733567715373-472512o05avbll5q7e85sjkrjhaf4d3t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.foundit",
+            "certificate_hash": "26704bbacb8e8bb0a829f58b8d3551c2eb216cd6"
+          }
+        },
+        {
           "client_id": "733567715373-6c6uoa8nutgghj1o8547mh3jt17ufv68.apps.googleusercontent.com",
           "client_type": 3
         }

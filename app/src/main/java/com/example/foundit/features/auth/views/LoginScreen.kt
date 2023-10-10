@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foundit.R
+import com.example.foundit.features.auth.states.SignInWithGoogleState
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
 import com.google.android.gms.auth.api.identity.Identity
 import com.orhanobut.logger.Logger
@@ -57,7 +58,6 @@ import kotlinx.coroutines.launch
 fun LoginScreen(
     navController: NavController,
     onSignInWithGoogleClick : () -> Unit,
-
     ) {
     val context = LocalContext.current
     
@@ -69,7 +69,11 @@ fun LoginScreen(
 
 
     LaunchedEffect(key1 = signInWithGoogleState ){
-            Toast.makeText(context, "Sign in Success", Toast.LENGTH_LONG).show()
+           if(
+                signInWithGoogleState.isSignInSuccess
+           ){
+               Toast.makeText(context, "Sign in Success", Toast.LENGTH_LONG).show()
+           }
 
     }
 
