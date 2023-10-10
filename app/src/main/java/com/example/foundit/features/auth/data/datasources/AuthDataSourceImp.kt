@@ -15,17 +15,16 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 
 class AuthDataSourceImp @Inject constructor(
-    private val authService : AuthService,
+    private val authService: AuthService,
     private val dbService: DbService
 ) : AuthDataSource {
-
-
 
 
     override suspend fun loginWithGoogle(oneTap: SignInClient): IntentSender {
@@ -43,14 +42,14 @@ class AuthDataSourceImp @Inject constructor(
             authService.signOut()
         } catch (e: Exception) {
             print(e.toString())
-             throw e
+            throw e
         }
     }
 
     override suspend fun getSignedInUser(): FirebaseUser? {
         try {
             return authService.getSignedInUser()
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             print(e.toString())
             throw e
         }
@@ -59,23 +58,24 @@ class AuthDataSourceImp @Inject constructor(
 
     override
     suspend fun signInWithIntent(params: LoginWithIntentParams): AppUser {
-        try{
+        try {
             val firebaseUser = authService.signInWithIntent(params)
-           val appUser : AppUser = AppUser(
-               firebaseUser!!.uid,
-               firebaseUser.displayName ?: "",
-               firebaseUser.email ?: "",
-               firebaseUser.photoUrl.toString())
+            Logger.d(firebaseUser.toString())
+            val appUser: AppUser = AppUser(
+                uid = firebaseUser!!.uid,
+                email = firebaseUser.email ?: "",
+                name = firebaseUser.displayName ?: "",
+                profilePicUrl = firebaseUser.photoUrl.toString(),
+            )
 
-dbService.addAppUserToDb(appUser)
+            dbService.addAppUserToDb(appUser)
 
             return appUser;
-       }catch (e: Exception){
-           print(e.toString())
-           throw e
-    }}
-
-
+        } catch (e: Exception) {
+            print(e.toString())
+            throw e
+        }
+    }
 
 
     //private val googleSignInClient = GoogleSignIn.getClient( gso)

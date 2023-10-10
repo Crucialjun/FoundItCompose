@@ -3,6 +3,7 @@ package com.example.foundit.services.db_service
 import com.example.foundit.core.app.models.AppUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.tasks.await
 
 class DbServiceImpl : DbService {
@@ -10,6 +11,7 @@ class DbServiceImpl : DbService {
 
     override suspend fun addAppUserToDb(appUser: AppUser) {
         try{
+            Logger.d("ading $appUser to db")
             db.collection("users").document(appUser.uid).set(appUser)
         } catch (e: Exception) {
             throw e

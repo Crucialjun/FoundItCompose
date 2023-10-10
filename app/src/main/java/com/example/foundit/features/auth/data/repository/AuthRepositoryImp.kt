@@ -3,6 +3,7 @@ package com.example.foundit.features.auth.data.repository
 import android.content.Intent
 import android.content.IntentSender
 import arrow.core.Either
+import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
 import com.example.foundit.features.auth.data.datasources.AuthDataSource
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
@@ -17,7 +18,7 @@ class AuthRepositoryImp @Inject constructor (
         return authDataSource.loginWithGoogle(oneTap)
     }
 
-    override suspend fun signInWithIntent(params: LoginWithIntentParams): Either<Failure, FirebaseUser?> {
+    override suspend fun signInWithIntent(params: LoginWithIntentParams): AppUser {
         return authDataSource.signInWithIntent(params)
     }
 }
