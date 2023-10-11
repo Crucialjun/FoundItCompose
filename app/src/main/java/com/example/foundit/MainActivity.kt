@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -22,7 +21,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
 import com.example.foundit.features.auth.views.LoginScreen
 import com.example.foundit.features.auth.views.SignupScreen
+import com.example.foundit.features.home.views.HomepageScreen
 import com.example.foundit.features.onboarding.OnboardingScreen
+import com.example.foundit.features.profile_setup.views.ProfileSetupView
 import com.example.foundit.ui.theme.FoundItTheme
 import com.google.android.gms.auth.api.identity.Identity
 import com.orhanobut.logger.AndroidLogAdapter
@@ -94,6 +95,24 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("register") {
                                 SignupScreen(navController)
+                            }
+                        }
+
+                        navigation(
+                            startDestination = "home_screen",
+                            route = "home"
+                        ) {
+                            composable("home_screen") {
+                                HomepageScreen()
+                            }
+                        }
+
+                        navigation(
+                            startDestination = "profile_setup_screen",
+                            route = "profile_setup"
+                        ) {
+                            composable("profile_setup_screen") {
+                                ProfileSetupView()
                             }
                         }
                     }

@@ -71,15 +71,16 @@ class LoginViewModel @Inject constructor (
         ).onEach {
             when (it) {
                 is Resource.Success -> {
+                    Logger.d("Sign in with intent success")
                    _signInWithGoogleState.value = SignInWithGoogleState(isSignInSuccess = true)
                 }
 
                 is Resource.Error -> {
-
+                    Logger.e("Sign in with intent error ${it.message}")
                 }
 
                 is Resource.Loading -> {
-                    Logger.d("Loading")
+                    Logger.d("Login with intent Loading")
                 }
 
             }

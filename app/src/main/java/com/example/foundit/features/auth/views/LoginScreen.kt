@@ -1,7 +1,6 @@
 package com.example.foundit.features.auth.views
 
 import android.widget.Toast
-import androidx.activity.result.IntentSenderRequest
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,12 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foundit.R
-import com.example.foundit.features.auth.states.SignInWithGoogleState
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
-import com.google.android.gms.auth.api.identity.Identity
-import com.orhanobut.logger.Logger
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 
@@ -73,6 +66,9 @@ fun LoginScreen(
                 signInWithGoogleState.isSignInSuccess
            ){
                Toast.makeText(context, "Sign in Success", Toast.LENGTH_LONG).show()
+               navController.navigate("profile_setup") {
+                   popUpTo(0)
+               }
            }
 
     }
