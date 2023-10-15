@@ -56,6 +56,7 @@ fun LoginScreen(
     
 
     var email by remember { mutableStateOf("") }
+
     val viewmodel: LoginViewModel = hiltViewModel()
     val intentRequestState by viewmodel.intentRequestState
     val signInWithGoogleState by viewmodel.signInWithGoogleState.collectAsState()
@@ -66,9 +67,7 @@ fun LoginScreen(
                 signInWithGoogleState.isSignInSuccess
            ){
                Toast.makeText(context, "Sign in Success", Toast.LENGTH_LONG).show()
-               navController.navigate("profile_setup") {
-                   popUpTo(0)
-               }
+               navController.navigate("profile_setup")
            }
 
     }

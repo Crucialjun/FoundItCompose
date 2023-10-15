@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
                             route = "profile_setup"
                         ) {
                             composable("profile_setup_screen") {
-                                ProfileSetupView()
+                                ProfileSetupView(navController)
                             }
                         }
                     }

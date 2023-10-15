@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
+import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
 import com.example.foundit.core.app.models.Resource
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
@@ -36,6 +37,9 @@ class LoginViewModel @Inject constructor (
 
     private val _intentRequestState = mutableStateOf(IntentRequestState())
     val intentRequestState : State<IntentRequestState> = _intentRequestState
+
+    private val _appUser = mutableStateOf(AppUser())
+    val appUser : State<AppUser> = _appUser
 
 
     suspend fun loginWithGoogle(oneTap :SignInClient){
@@ -71,8 +75,9 @@ class LoginViewModel @Inject constructor (
         ).onEach {
             when (it) {
                 is Resource.Success -> {
-                    Logger.d("Sign in with intent success")
-                   _signInWithGoogleState.value = SignInWithGoogleState(isSignInSuccess = true)
+                Logger.d("Sign in with intent success,with${it.data?.name}}")
+                   _signInWithGoogleState.value = SignInWithGoogleState(isSignInSuccess = true, appUser = it.data)
+                    _appUser.value = it.data!!
                 }
 
                 is Resource.Error -> {
