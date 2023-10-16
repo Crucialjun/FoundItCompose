@@ -21,10 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.foundit.R
+import com.example.foundit.services.shared_preferences_service.SharedPreferenceService
 
 
 @Composable
-fun OnboardingScreen(navController: NavController) {
+fun OnboardingScreen(
+    navController: NavController,
+    sharedPreferenceService: SharedPreferenceService
+) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,15 +51,26 @@ fun OnboardingScreen(navController: NavController) {
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 36.sp)
         )
         Spacer(Modifier.height(32.dp))
-        Text("Reuniting you with your lost  items",style = TextStyle(fontWeight = FontWeight.W400, fontSize = 24.sp, textAlign = TextAlign.Center))
+        Text(
+            "Reuniting you with your lost  items",
+            style = TextStyle(
+                fontWeight = FontWeight.W400,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        )
         Spacer(Modifier.height(64.dp))
-        Button(onClick = { navController.navigate("auth"){
-            popUpTo(0)
-        } },modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp), shape = RoundedCornerShape(8.dp)
+        Button(
+            onClick = {
+                sharedPreferenceService.saveData("isFirstTime", "false")
+                navController.navigate("auth") {
+                    popUpTo(0)
+                }
+            }, modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp), shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Start",style = TextStyle(fontWeight = FontWeight.Bold))
+            Text("Start", style = TextStyle(fontWeight = FontWeight.Bold))
 
         }
     }

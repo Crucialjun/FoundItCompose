@@ -9,7 +9,8 @@ import com.example.foundit.services.auth_service.AuthService
 import com.example.foundit.services.auth_service.AuthServiceImpl
 import com.example.foundit.services.db_service.DbService
 import com.example.foundit.services.db_service.DbServiceImpl
-import com.google.android.gms.auth.api.identity.SignInClient
+import com.example.foundit.services.shared_preferences_service.SharedPreferenceService
+import com.example.foundit.services.shared_preferences_service.SharedPreferenceServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,5 +53,13 @@ class AppModule {
 
     ): DbService {
         return DbServiceImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferenceService(
+        @ApplicationContext context: Context
+    ): SharedPreferenceService {
+        return SharedPreferenceServiceImpl(context)
     }
 }
