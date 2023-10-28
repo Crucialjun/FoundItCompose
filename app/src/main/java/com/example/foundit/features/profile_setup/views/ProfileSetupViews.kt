@@ -26,7 +26,7 @@ fun ProfileSetupView(
            Text("Fill in your profile")
             Text(text = "The user is ${viewmodel.appUser.value.name}")
             AsyncImage(
-                model = "https://example.com/image.jpg",
+                "https://example.com/image.jpg",
                 contentDescription = null,
             )
 
