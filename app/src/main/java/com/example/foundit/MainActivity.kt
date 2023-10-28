@@ -24,6 +24,7 @@ import com.example.foundit.features.auth.views.SignupScreen
 import com.example.foundit.features.home.views.HomepageScreen
 import com.example.foundit.features.onboarding.OnboardingScreen
 import com.example.foundit.features.profile_setup.views.ProfileSetupView
+import com.example.foundit.services.shared_preferences_service.SharedPreferenceServiceImpl
 import com.example.foundit.ui.theme.FoundItTheme
 import com.google.android.gms.auth.api.identity.Identity
 import com.orhanobut.logger.AndroidLogAdapter
@@ -38,6 +39,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Logger.addLogAdapter(AndroidLogAdapter())
 
+        val sharedPreferenceService = SharedPreferenceServiceImpl(applicationContext)
+
+        val isFirstTime = sharedPreferenceService.getData("isFirstTime", "true")
+
         setContent {
             val oneTapClient = Identity.getSignInClient(applicationContext)
             FoundItTheme {
@@ -51,13 +56,16 @@ class MainActivity : ComponentActivity() {
                     ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "onboarding") {
+                    NavHost(
+                        navController = navController,
+                        startDestination = if (isFirstTime == "true") "onboarding" else "auth"
+                    ) {
                         navigation(
                             startDestination = "onboarding_screen",
                             route = "onboarding"
                         ) {
                             composable("onboarding_screen") {
-                                OnboardingScreen(navController)
+                                OnboardingScreen(navController, sharedPreferenceService)
                             }
                         }
 
