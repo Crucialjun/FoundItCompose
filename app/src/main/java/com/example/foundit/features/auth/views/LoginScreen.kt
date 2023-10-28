@@ -67,6 +67,7 @@ fun LoginScreen(
                 signInWithGoogleState.isSignInSuccess
            ){
                Toast.makeText(context, "Sign in Success", Toast.LENGTH_LONG).show()
+               viewmodel.updateUsername(signInWithGoogleState.appUser?.name ?: "")
                navController.navigate("profile_setup")
            }
 

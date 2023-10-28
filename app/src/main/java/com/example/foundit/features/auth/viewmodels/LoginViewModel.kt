@@ -3,7 +3,9 @@ package com.example.foundit.features.auth.viewmodels
 import android.content.Intent
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
@@ -30,19 +32,26 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor (
     private val loginWithGoogleUseCase: LoginWithGoogleUseCase,
     private val signInWithIntentUseCase: SignInWithIntentUseCase
-) : ViewModel(){
+) : ViewModel() {
 
     private val _signInWithGoogleState = MutableStateFlow(SignInWithGoogleState())
     val signInWithGoogleState = _signInWithGoogleState.asStateFlow()
 
     private val _intentRequestState = mutableStateOf(IntentRequestState())
-    val intentRequestState : State<IntentRequestState> = _intentRequestState
+    val intentRequestState: State<IntentRequestState> = _intentRequestState
 
     private val _appUser = mutableStateOf(AppUser())
-    val appUser : State<AppUser> = _appUser
+    val appUser: State<AppUser> = _appUser
+
+    var username by mutableStateOf("")
+        private set
+
+    fun updateUsername(username: String) {
+        this.username = username
+    }
 
 
-    suspend fun loginWithGoogle(oneTap :SignInClient){
+    suspend fun loginWithGoogle(oneTap: SignInClient) {
         Log.d("TAG", "Login with google called")
         loginWithGoogleUseCase(oneTap).onEach {
             when (it) {
