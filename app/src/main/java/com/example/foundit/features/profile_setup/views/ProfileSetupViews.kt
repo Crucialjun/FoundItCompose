@@ -3,12 +3,17 @@ package com.example.foundit.features.profile_setup.views
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,9 +42,10 @@ fun ProfileSetupView(
     val loginViewModel: LoginViewModel = hiltViewModel(backStackEntry)
     val viewmodel: ProfileSetupViewModel = hiltViewModel()
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(horizontal = 24.dp)
     ) {
-        Text("Fill in your profile", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Fill in your profile", fontSize = 32.sp, fontWeight = FontWeight.Black)
         Spacer(modifier = Modifier.height(20.dp))
         AsyncImage(
 
@@ -54,11 +60,66 @@ fun ProfileSetupView(
         )
         Spacer(modifier = Modifier.height(24.dp))
         TextField(
+            placeholder = { Text("Full Name") },
+            label = { Text("Full Name") },
             value = loginViewModel.username,
             onValueChange = {
                 loginViewModel.updateUsername(it)
 
-            })
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray.copy(alpha = 0.4f),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+
+                ),
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth(),
+
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            placeholder = { Text("Username") },
+            label = { Text("Username") },
+            value = loginViewModel.username,
+            onValueChange = {
+                loginViewModel.updateUsername(it)
+
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray.copy(alpha = 0.4f),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+
+                ),
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth(),
+
+            )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            placeholder = { Text("email") },
+            label = { Text("Email") },
+            value = loginViewModel.username,
+            onValueChange = {
+                loginViewModel.updateUsername(it)
+
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray.copy(alpha = 0.4f),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+
+                ),
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth(),
+
+            )
+
+
 
     }
 
