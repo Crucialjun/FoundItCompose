@@ -1,6 +1,7 @@
 package com.example.foundit.features.profile_setup.views
 
 import androidx.compose.foundation.border
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +32,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
 import com.example.foundit.features.profile_setup.viewmodels.ProfileSetupViewModel
+import com.togitech.ccp.component.TogiCountryCodePicker
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,7 +106,7 @@ fun ProfileSetupView(
         TextField(
             placeholder = { Text("email") },
             label = { Text("Email") },
-            value = loginViewModel.username,
+            value = loginViewModel.appUser.value.email,
             onValueChange = {
                 loginViewModel.updateUsername(it)
 
@@ -118,6 +122,28 @@ fun ProfileSetupView(
             modifier = Modifier.fillMaxWidth(),
 
             )
+        Spacer(modifier = Modifier.height(16.dp))
+        TogiCountryCodePicker(
+            onValueChange = {
+
+            },
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            color = Color.LightGray.copy(alpha = 0.4f),
+            shape = RoundedCornerShape(10.dp),
+            text = "Phone Number",
+
+        )
+        Spacer(modifier = Modifier.height(48.dp))
+        Button(
+            onClick = {}, modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp), shape = RoundedCornerShape(8.dp)
+        ) {
+            Text("Continue", style = TextStyle(fontWeight = FontWeight.Bold))
+
+        }
+
 
 
 

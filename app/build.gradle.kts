@@ -65,9 +65,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.4")
 
     // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    implementation("com.google.firebase:firebase-firestore-ktx:24.8.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.9.0")
+    ksp("com.google.dagger:hilt-android-compiler:2.48.1")
 
     ksp ("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0")
 
@@ -75,14 +75,14 @@ dependencies {
 
     implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.9.10-1.0.13")
 
-    ksp ("com.google.dagger:dagger-compiler:2.48")
+    ksp ("com.google.dagger:dagger-compiler:2.48.1")
 
 
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
 
 
     //Firebase
-    implementation("com.google.firebase:firebase-auth-ktx:22.1.2")
+    implementation("com.google.firebase:firebase-auth-ktx:22.2.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     //Arrow
@@ -94,6 +94,9 @@ dependencies {
 
     //coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    //country picker
+    implementation ("com.github.togisoft:jetpack_compose_country_code_picker:1.1.4")
 
 
 
