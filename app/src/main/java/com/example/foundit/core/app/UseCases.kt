@@ -1,6 +1,5 @@
 package com.example.foundit.core.app
 
-import com.example.foundit.core.app.models.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface UseCases<T, Params> {

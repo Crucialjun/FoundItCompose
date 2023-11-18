@@ -11,7 +11,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
-import com.example.foundit.core.app.models.Resource
+import com.example.foundit.core.app.Resource
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.features.auth.domain.usecases.LoginWithGoogleUseCase
 import com.example.foundit.features.auth.domain.usecases.SignInWithIntentUseCase
