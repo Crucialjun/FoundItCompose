@@ -43,11 +43,32 @@ class LoginViewModel @Inject constructor (
     private val _appUser = mutableStateOf(AppUser())
     val appUser: State<AppUser> = _appUser
 
+    var email by mutableStateOf("")
+        private set
+
+    fun updateEmail(email: String) {
+        this.email = email
+    }
+
+    var password by mutableStateOf("")
+        private set
+
+    fun updatePassword(password: String) {
+        this.password = password
+    }
+
     var username by mutableStateOf("")
         private set
 
     fun updateUsername(username: String) {
         this.username = username
+    }
+
+    var isPasswordVisible by mutableStateOf(false)
+        private set
+
+    var updatePasswordVisibility: () -> Unit ={
+        this.isPasswordVisible = !isPasswordVisible
     }
 
 

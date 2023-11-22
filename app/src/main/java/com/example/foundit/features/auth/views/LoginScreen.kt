@@ -2,6 +2,7 @@ package com.example.foundit.features.auth.views
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,7 +58,7 @@ fun LoginScreen(
     val context = LocalContext.current
     
 
-    var email by remember { mutableStateOf("") }
+
 
     val viewmodel: LoginViewModel = hiltViewModel()
     val intentRequestState by viewmodel.intentRequestState
@@ -147,9 +150,9 @@ fun LoginScreen(
         )
         Spacer(Modifier.height(32.dp))
         OutlinedTextField(
-            value = email,
+            value = viewmodel.email,
             onValueChange = {
-                email = it
+                viewmodel.updateEmail(it)
             },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
@@ -160,19 +163,32 @@ fun LoginScreen(
             )
         )
         OutlinedTextField(
-            value = email,
+            value = viewmodel.password,
             onValueChange = {
-                email = it
+                viewmodel.updatePassword(it)
             },
+            singleLine = true,
+            visualTransformation = if (viewmodel.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             label = { Text("Password") },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = Color.Gray,
 
 
+                ),
+            trailingIcon = {
+                Icon(
+                    painter = if (viewmodel.isPasswordVisible) painterResource(id = R.drawable.visibility_24) else painterResource(id = R.drawable.baseline_visibility_off_24),
+                    contentDescription = "Eye",
+                    modifier = Modifier
+                        .height(24.dp)
+                        .width(24.dp).clickable {
+                            viewmodel.updatePasswordVisibility()
+                        }
                 )
+            }
         )
         Spacer(Modifier.height(12.dp))
         Button(

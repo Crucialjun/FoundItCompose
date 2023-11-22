@@ -71,6 +71,7 @@ fun ProfileSetupView(
                 loginViewModel.updateUsername(it)
 
             },
+
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray.copy(alpha = 0.4f),
                 focusedIndicatorColor = Color.Transparent,
