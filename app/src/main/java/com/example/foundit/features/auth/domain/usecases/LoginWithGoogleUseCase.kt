@@ -1,11 +1,7 @@
 package com.example.foundit.features.auth.domain.usecases
 
 import android.content.IntentSender
-import android.util.Log
-import arrow.core.Either
-import com.example.foundit.core.app.models.Failure
-import com.example.foundit.core.app.NoParams
-import com.example.foundit.core.app.models.Resource
+import com.example.foundit.core.app.Resource
 import com.example.foundit.core.app.UseCases
 import com.example.foundit.features.auth.data.repository.AuthRepository
 import com.google.android.gms.auth.api.identity.SignInClient
