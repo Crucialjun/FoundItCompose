@@ -26,9 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -132,8 +129,8 @@ fun LoginScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
                     Icon(
-                        painter = painterResource(id = R.drawable.apple),
-                        contentDescription = "Google",
+                        painter = painterResource(id = R.drawable.facebook),
+                        contentDescription = "Facebook Logo",
                     )
 
                 }
@@ -184,7 +181,8 @@ fun LoginScreen(
                     contentDescription = "Eye",
                     modifier = Modifier
                         .height(24.dp)
-                        .width(24.dp).clickable {
+                        .width(24.dp)
+                        .clickable {
                             viewmodel.updatePasswordVisibility()
                         }
                 )
