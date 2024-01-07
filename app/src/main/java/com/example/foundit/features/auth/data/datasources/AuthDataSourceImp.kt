@@ -2,7 +2,9 @@ package com.example.foundit.features.auth.data.datasources
 
 
 import android.content.IntentSender
+import arrow.core.Either
 import com.example.foundit.core.app.models.AppUser
+import com.example.foundit.core.app.models.Failure
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.services.auth_service.AuthService
 import com.example.foundit.services.db_service.DbService
@@ -74,6 +76,15 @@ class AuthDataSourceImp @Inject constructor(
             print(e.toString())
             throw e
         }
+    }
+
+    override suspend fun registerWithEmail(
+        email: String,
+        password: String
+    ): Either<Failure, FirebaseUser?> {
+
+        return authService.registerWithEmail(email, password)
+
     }
 
 

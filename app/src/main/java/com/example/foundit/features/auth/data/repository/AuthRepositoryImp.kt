@@ -1,7 +1,7 @@
 package com.example.foundit.features.auth.data.repository
 
-import android.content.Intent
 import android.content.IntentSender
+import android.util.Log
 import arrow.core.Either
 import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
@@ -13,12 +13,20 @@ import javax.inject.Inject
 
 class AuthRepositoryImp @Inject constructor (
     private val authDataSource: AuthDataSource
-)  : AuthRepository{
-    override suspend fun loginWithGoogle(oneTap : SignInClient): IntentSender? {
+)  : AuthRepository {
+    override suspend fun loginWithGoogle(oneTap: SignInClient): IntentSender? {
         return authDataSource.loginWithGoogle(oneTap)
     }
 
     override suspend fun signInWithIntent(params: LoginWithIntentParams): AppUser {
         return authDataSource.signInWithIntent(params)
+    }
+
+    override suspend fun registerWithEmail(
+        email: String,
+        password: String
+    ): Either<Failure, FirebaseUser?> {
+        Log.d("TAG", "registerWithEmail: registraton at repository ")
+        return authDataSource.registerWithEmail(email, password)
     }
 }

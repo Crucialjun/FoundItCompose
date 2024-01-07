@@ -132,7 +132,6 @@ fun LoginScreen(
                         painter = painterResource(id = R.drawable.facebook),
                         contentDescription = "Facebook Logo",
                     )
-
                 }
 
             }

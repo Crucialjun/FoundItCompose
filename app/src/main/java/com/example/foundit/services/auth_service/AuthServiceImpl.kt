@@ -1,8 +1,8 @@
 package com.example.foundit.services.auth_service
 
 import android.content.IntentSender
+import android.util.Log
 import arrow.core.Either
-import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -49,8 +49,24 @@ class AuthServiceImpl : AuthService {
             return auth.signInWithCredential(googleCredentials).await().user
 
         } catch (e: Exception) {
-             throw e
+            throw e
 
+        }
+    }
+
+    override suspend fun registerWithEmail(
+        email: String,
+        password: String
+    ): Either<Failure, FirebaseUser?> {
+        return try {
+            val user = auth.createUserWithEmailAndPassword(email, password).await().user
+            Either.Right(user)
+        } catch (e: Exception) {
+            Log.e("TAG", "registerWithEmail: $e")
+            when (e) {
+                is CancellationException -> throw e
+                else -> Either.Left(Failure(e.message ?: "Something went wrong"))
+            }
         }
     }
 
