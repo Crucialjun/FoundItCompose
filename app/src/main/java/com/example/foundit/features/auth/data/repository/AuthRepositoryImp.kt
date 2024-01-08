@@ -8,7 +8,6 @@ import com.example.foundit.core.app.models.Failure
 import com.example.foundit.features.auth.data.datasources.AuthDataSource
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 
 class AuthRepositoryImp @Inject constructor (
@@ -24,9 +23,10 @@ class AuthRepositoryImp @Inject constructor (
 
     override suspend fun registerWithEmail(
         email: String,
-        password: String
-    ): Either<Failure, FirebaseUser?> {
+        password: String,
+        username: String
+    ): Either<Failure, AppUser?> {
         Log.d("TAG", "registerWithEmail: registraton at repository ")
-        return authDataSource.registerWithEmail(email, password)
+        return authDataSource.registerWithEmail(email, password, username)
     }
 }

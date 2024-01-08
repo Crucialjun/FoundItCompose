@@ -56,7 +56,7 @@ class RegisterViewModel @Inject constructor(
             RegisterWithEmailParams(
                 email = email,
                 password = password,
-
+                username = username
                 )
         ).onEach {
             when (it) {
@@ -68,10 +68,12 @@ class RegisterViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     Log.d("TAG", "register: success")
+                    _registerState.value = RegisterState(appUser = it.data, isSignInSuccess = true)
                 }
 
                 is Resource.Error -> {
                     Log.d("TAG", "register: error")
+                    _registerState.value = RegisterState(error = it.message ?: "An error occurred")
                 }
 
 

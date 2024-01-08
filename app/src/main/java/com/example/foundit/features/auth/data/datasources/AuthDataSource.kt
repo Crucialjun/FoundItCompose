@@ -16,7 +16,11 @@ interface AuthDataSource {
 
     suspend fun signInWithIntent(params: LoginWithIntentParams): AppUser
 
-    suspend fun registerWithEmail(email: String, password: String): Either<Failure, FirebaseUser?>
+    suspend fun registerWithEmail(
+        email: String,
+        password: String,
+        username: String
+    ): Either<Failure, AppUser?>
 
 
 }

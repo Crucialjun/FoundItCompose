@@ -80,11 +80,30 @@ class AuthDataSourceImp @Inject constructor(
 
     override suspend fun registerWithEmail(
         email: String,
-        password: String
-    ): Either<Failure, FirebaseUser?> {
+        password: String,
+        username: String
+    ): Either<Failure, AppUser?> {
 
-        return authService.registerWithEmail(email, password)
+        val res: Either<Failure, FirebaseUser?> = authService.registerWithEmail(email, password)
 
+        return res.fold<Either<Failure, AppUser?>>(
+            ifLeft = {
+                return Either.Left(Failure(it.message ?: "An error occurred"))
+            }
+        ) {
+            val appUser: AppUser = AppUser(
+                uid = it?.uid ?: "",
+                email = it?.email ?: "",
+                name = username,
+                profilePicUrl = it?.photoUrl.toString(),
+            )
+
+            Logger.d("Register with email success,with${it?.email}}")
+            dbService.addAppUserToDb(appUser)
+            return Either.Right(appUser)
+        }
+
+        
     }
 
 
