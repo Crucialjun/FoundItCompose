@@ -12,6 +12,8 @@ import com.example.foundit.features.auth.domain.params.RegisterWithEmailParams
 import com.example.foundit.features.auth.domain.usecases.RegisterWithEmailUsecase
 import com.example.foundit.features.auth.states.RegisterState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -21,8 +23,10 @@ class RegisterViewModel @Inject constructor(
     private val registerWithEmailUsecase: RegisterWithEmailUsecase
 ) : ViewModel() {
 
-    private val _registerState = mutableStateOf(RegisterState())
-    val registerState = _registerState
+    private val _registerState = MutableStateFlow(RegisterState())
+    val registerState = _registerState.asStateFlow()
+
+
     var username by mutableStateOf("")
         private set
     var email by mutableStateOf("")
@@ -80,5 +84,9 @@ class RegisterViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
+    }
+
+    fun resetState() {
+        _registerState.value = RegisterState()
     }
 }

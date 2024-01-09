@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foundit.R
 import com.example.foundit.features.auth.viewmodels.RegisterViewModel
+import com.example.foundit.utils.CustomDialog
 import kotlinx.coroutines.launch
 
 
@@ -46,12 +48,32 @@ import kotlinx.coroutines.launch
 fun SignupScreen(
 
     navController: NavController
-)  {
+) {
 
-    val viewmodel : RegisterViewModel = hiltViewModel()
+    val viewmodel: RegisterViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
-    val registerState by viewmodel.registerState
+    val registerState by viewmodel.registerState.collectAsState()
 
+    if (registerState.error != null) {
+        CustomDialog(
+            onDismiss = {
+                viewmodel.resetState()
+            },
+            title = "Error",
+            description = registerState.error ?: "",
+            positiveAction = {
+
+            }
+        )
+    }
+
+    if (registerState.isSignInSuccess) {
+        navController.navigate("profile_setup") {
+            popUpTo("auth") {
+                inclusive = true
+            }
+        }
+    }
 
 
 
