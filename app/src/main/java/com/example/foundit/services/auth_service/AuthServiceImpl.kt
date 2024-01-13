@@ -70,6 +70,22 @@ class AuthServiceImpl : AuthService {
         }
     }
 
+    override suspend fun loginWithEmail(
+        email: String,
+        password: String
+    ): Either<Failure, FirebaseUser?> {
+        return try {
+            val user = auth.signInWithEmailAndPassword(email, password).await().user
+            Either.Right(user)
+        } catch (e: Exception) {
+            Log.e("TAG", "loginWithEmail: $e")
+            when (e) {
+                is CancellationException -> throw e
+                else -> Either.Left(Failure(e.message ?: "Something went wrong"))
+            }
+        }
+    }
+
     private fun buildGoogleSignInRequest(): BeginSignInRequest {
         return BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(

@@ -17,4 +17,6 @@ interface AuthService {
     suspend fun signInWithIntent(params: LoginWithIntentParams): FirebaseUser?
 
     suspend fun registerWithEmail(email: String, password: String): Either<Failure, FirebaseUser?>
+
+    suspend fun loginWithEmail(email: String, password: String): Either<Failure, FirebaseUser?>
 }

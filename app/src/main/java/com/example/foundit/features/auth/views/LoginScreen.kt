@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +46,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foundit.R
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
+import com.example.foundit.utils.CustomDialog
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 
@@ -53,24 +57,45 @@ fun LoginScreen(
     onSignInWithGoogleClick : () -> Unit,
     ) {
     val context = LocalContext.current
-    
-
 
 
     val viewmodel: LoginViewModel = hiltViewModel()
     val intentRequestState by viewmodel.intentRequestState
     val signInWithGoogleState by viewmodel.signInWithGoogleState.collectAsState()
+    val loginWithEmailState by viewmodel.loginWithEmailState
+    val coroutineScope = rememberCoroutineScope()
 
 
-    LaunchedEffect(key1 = signInWithGoogleState ){
-           if(
-                signInWithGoogleState.isSignInSuccess
-           ){
-               Toast.makeText(context, "Sign in Success", Toast.LENGTH_LONG).show()
-               viewmodel.updateUsername(signInWithGoogleState.appUser?.name ?: "")
-               navController.navigate("profile_setup")
-           }
+    LaunchedEffect(key1 = signInWithGoogleState) {
+        if (
+            signInWithGoogleState.isSignInSuccess
+        ) {
+            Toast.makeText(context, "Sign in Success", Toast.LENGTH_LONG).show()
+            viewmodel.updateUsername(signInWithGoogleState.appUser?.name ?: "")
+            navController.navigate("profile_setup")
+        }
 
+    }
+
+    if (loginWithEmailState.error != null) {
+        CustomDialog(
+            onDismiss = {
+                viewmodel.resetState()
+            },
+            title = "Error",
+            description = loginWithEmailState.error ?: "",
+            positiveAction = {
+
+            }
+        )
+    }
+
+    if (loginWithEmailState.isSignInSuccess) {
+        navController.navigate("profile_setup") {
+            popUpTo("auth") {
+                inclusive = true
+            }
+        }
     }
 
 
@@ -189,11 +214,21 @@ fun LoginScreen(
         )
         Spacer(Modifier.height(12.dp))
         Button(
-            onClick = {}, modifier = Modifier
+            onClick = {
+                coroutineScope.launch {
+                    viewmodel.loginWithEmail(
+                        viewmodel.email,
+                        viewmodel.password
+                    )
+                }
+            }, modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp), shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Sign In", style = TextStyle(fontWeight = FontWeight.Bold))
+            if (loginWithEmailState.isLoading) {
+                CircularProgressIndicator()
+            } else
+                Text("Sign In", style = TextStyle(fontWeight = FontWeight.Bold))
 
         }
         Spacer(Modifier.height(32.dp))
@@ -217,3 +252,6 @@ fun LoginScreen(
         }
     }
 }
+
+
+

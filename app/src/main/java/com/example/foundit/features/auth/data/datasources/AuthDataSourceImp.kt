@@ -5,6 +5,7 @@ import android.content.IntentSender
 import arrow.core.Either
 import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
+import com.example.foundit.features.auth.domain.params.LoginWithEmailParams
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.services.auth_service.AuthService
 import com.example.foundit.services.db_service.DbService
@@ -103,7 +104,36 @@ class AuthDataSourceImp @Inject constructor(
             return Either.Right(appUser)
         }
 
-        
+
+    }
+
+    override suspend fun loginWithEmail(
+        params: LoginWithEmailParams
+    ): Either<Failure, AppUser?> {
+        val res: Either<Failure, FirebaseUser?> =
+            authService.loginWithEmail(params.email, params.password)
+
+        return res.fold<Either<Failure, AppUser?>>(
+            ifLeft = {
+                return Either.Left(Failure(it.message ?: "An error occurred"))
+            }
+        ) {
+            val appUser: AppUser? = dbService.retrieveAppUserFromDb(it?.uid ?: "")
+
+            if (appUser == null) {
+                val newAppUser: AppUser = AppUser(
+                    uid = it?.uid ?: "",
+                    email = it?.email ?: "",
+                    name = it?.displayName ?: "",
+                    profilePicUrl = it?.photoUrl.toString(),
+                )
+                dbService.addAppUserToDb(newAppUser)
+                return Either.Right(newAppUser)
+            }
+
+            Logger.d("Login with email success,with${it?.email}}")
+            return Either.Right(appUser)
+        }
     }
 
 

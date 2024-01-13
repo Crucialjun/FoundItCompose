@@ -9,13 +9,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
+import com.example.foundit.core.app.Resource
 import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
-import com.example.foundit.core.app.Resource
+import com.example.foundit.features.auth.domain.params.LoginWithEmailParams
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
+import com.example.foundit.features.auth.domain.usecases.LoginWithEmailUsecase
 import com.example.foundit.features.auth.domain.usecases.LoginWithGoogleUseCase
 import com.example.foundit.features.auth.domain.usecases.SignInWithIntentUseCase
 import com.example.foundit.features.auth.states.IntentRequestState
+import com.example.foundit.features.auth.states.LoginWithEmailState
 import com.example.foundit.features.auth.states.SignInWithGoogleState
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseUser
@@ -29,9 +32,10 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor (
+class LoginViewModel @Inject constructor(
     private val loginWithGoogleUseCase: LoginWithGoogleUseCase,
-    private val signInWithIntentUseCase: SignInWithIntentUseCase
+    private val signInWithIntentUseCase: SignInWithIntentUseCase,
+    private val loginWithEmailUseCase: LoginWithEmailUsecase
 ) : ViewModel() {
 
     private val _signInWithGoogleState = MutableStateFlow(SignInWithGoogleState())
@@ -39,6 +43,9 @@ class LoginViewModel @Inject constructor (
 
     private val _intentRequestState = mutableStateOf(IntentRequestState())
     val intentRequestState: State<IntentRequestState> = _intentRequestState
+
+    private val _loginWithEmailState = mutableStateOf(LoginWithEmailState())
+    val loginWithEmailState: State<LoginWithEmailState> = _loginWithEmailState
 
     private val _appUser = mutableStateOf(AppUser())
     val appUser: State<AppUser> = _appUser
@@ -144,7 +151,35 @@ class LoginViewModel @Inject constructor (
         }
     }
 
-    fun resetState(){
+    suspend fun loginWithEmail(email: String, password: String) {
+        loginWithEmailUseCase(
+            LoginWithEmailParams(
+                email = email,
+                password = password
+            )
+        ).onEach {
+            when (it) {
+                is Resource.Success -> {
+                    Logger.d("Sign in with intent success,with${it.data?.name}}")
+                    _loginWithEmailState.value =
+                        LoginWithEmailState(isSignInSuccess = true, appUser = it.data)
+
+                }
+
+                is Resource.Error -> {
+                    _loginWithEmailState.value =
+                        LoginWithEmailState(error = it.message ?: "An error occurred")
+                }
+
+                is Resource.Loading -> {
+                    _loginWithEmailState.value = LoginWithEmailState(isLoading = true)
+                }
+
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun resetState() {
         _signInWithGoogleState.update {
             SignInWithGoogleState()
         }
