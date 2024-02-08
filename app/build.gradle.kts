@@ -91,6 +91,9 @@ dependencies {
     //country picker
     implementation("com.github.togisoft:jetpack_compose_country_code_picker:1.1.4")
 
+    //moshi
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+
 
 
 

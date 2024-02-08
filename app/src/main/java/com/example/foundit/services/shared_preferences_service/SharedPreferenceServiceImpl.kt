@@ -8,13 +8,13 @@ class SharedPreferenceServiceImpl(@ApplicationContext context: Context) : Shared
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-    override fun saveData(key: String, value: String) {
+    override suspend fun saveData(key: String, value: String) {
         val editor = sharedPreferences.edit()
         editor.putString(key, value)
         editor.apply()
     }
 
-    override fun getData(key: String, defaultValue: String): String {
+    override suspend fun getData(key: String, defaultValue: String): String {
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
 
