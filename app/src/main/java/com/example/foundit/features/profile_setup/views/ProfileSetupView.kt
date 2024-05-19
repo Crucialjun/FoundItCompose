@@ -67,9 +67,9 @@ fun ProfileSetupView(
             TextField(
                 placeholder = { Text("Full Name") },
                 label = { Text("Full Name") },
-                value = "",
+                value = viewmodel.fullName,
                 onValueChange = {
-
+                    viewmodel.updateFullName(it)
 
                 },
 

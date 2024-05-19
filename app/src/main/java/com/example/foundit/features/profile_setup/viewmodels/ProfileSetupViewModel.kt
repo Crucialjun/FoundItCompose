@@ -1,5 +1,8 @@
 package com.example.foundit.features.profile_setup.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foundit.core.app.models.AppUser
@@ -22,6 +25,33 @@ class ProfileSetupViewModel @Inject constructor(
 
     private val _profileSetupState = MutableStateFlow(ProfileSetupState())
     val profileSetupState = _profileSetupState.asStateFlow()
+
+    private var _fullName by mutableStateOf("")
+
+    val fullName: String
+        get() = _fullName
+
+    fun updateFullName(fullName: String) {
+        this._fullName = fullName
+    }
+
+    private var userName by mutableStateOf("")
+
+    fun updateUserName(userName: String) {
+        this.userName = userName
+    }
+
+    private var phoneNumber by mutableStateOf("")
+
+    fun updatePhoneNumber(phoneNumber: String) {
+        this.phoneNumber = phoneNumber
+    }
+
+    private var email by mutableStateOf("")
+
+    fun updateEmail(email: String) {
+        this.email = email
+    }
 
 
     init {
