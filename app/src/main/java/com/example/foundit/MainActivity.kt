@@ -18,9 +18,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.foundit.features.auth.presentation.views.LoginScreen
+import com.example.foundit.features.auth.presentation.views.SignupScreen
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
-import com.example.foundit.features.auth.views.LoginScreen
-import com.example.foundit.features.auth.views.SignupScreen
 import com.example.foundit.features.home.views.HomepageScreen
 import com.example.foundit.features.onboarding.OnboardingScreen
 import com.example.foundit.features.profile_setup.views.ProfileSetupView

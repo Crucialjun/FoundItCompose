@@ -1,4 +1,4 @@
-package com.example.foundit.features.auth.views
+package com.example.foundit.features.auth.presentation.views
 
 import android.util.Log
 import androidx.compose.foundation.Image

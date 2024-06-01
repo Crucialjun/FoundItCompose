@@ -99,6 +99,7 @@ class LoginViewModel @Inject constructor(
                     _intentRequestState.value = IntentRequestState(isLoading = true)
                 }
 
+
             }
         }.launchIn(viewModelScope)
     }
@@ -174,6 +175,7 @@ class LoginViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _loginWithEmailState.value = LoginWithEmailState(isLoading = true)
                 }
+
 
             }
         }.launchIn(viewModelScope)

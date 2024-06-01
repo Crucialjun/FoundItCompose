@@ -1,4 +1,4 @@
-package com.example.foundit.features.auth.views
+package com.example.foundit.features.auth.presentation.views
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -47,6 +47,8 @@ import androidx.navigation.NavController
 import com.example.foundit.R
 import com.example.foundit.features.auth.viewmodels.LoginViewModel
 import com.example.foundit.utils.CustomDialog
+import com.facebook.CallbackManager
+import com.facebook.login.LoginManager
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +66,11 @@ fun LoginScreen(
     val signInWithGoogleState by viewmodel.signInWithGoogleState.collectAsState()
     val loginWithEmailState by viewmodel.loginWithEmailState
     val coroutineScope = rememberCoroutineScope()
+
+    val callbackManager = CallbackManager.Factory.create()
+    val loginManager = LoginManager.getInstance()
+
+
 
 
     LaunchedEffect(key1 = signInWithGoogleState) {
@@ -147,7 +154,9 @@ fun LoginScreen(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = {}, modifier = Modifier
+                onClick = {
+
+                }, modifier = Modifier
 
                     .height(48.dp), shape = RoundedCornerShape(8.dp)
             ) {
