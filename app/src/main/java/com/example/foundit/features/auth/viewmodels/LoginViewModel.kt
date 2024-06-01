@@ -12,6 +12,7 @@ import arrow.core.Either
 import com.example.foundit.core.app.Resource
 import com.example.foundit.core.app.models.AppUser
 import com.example.foundit.core.app.models.Failure
+import com.example.foundit.core.constants.shared_pref.SharedPrefConsts
 import com.example.foundit.features.auth.domain.params.LoginWithEmailParams
 import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.features.auth.domain.usecases.LoginWithEmailUsecase
@@ -20,9 +21,12 @@ import com.example.foundit.features.auth.domain.usecases.SignInWithIntentUseCase
 import com.example.foundit.features.auth.states.IntentRequestState
 import com.example.foundit.features.auth.states.LoginWithEmailState
 import com.example.foundit.features.auth.states.SignInWithGoogleState
+import com.example.foundit.services.shared_preferences_service.SharedPreferenceService
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseUser
 import com.orhanobut.logger.Logger
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +39,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginWithGoogleUseCase: LoginWithGoogleUseCase,
     private val signInWithIntentUseCase: SignInWithIntentUseCase,
-    private val loginWithEmailUseCase: LoginWithEmailUsecase
+    private val loginWithEmailUseCase: LoginWithEmailUsecase,
+    private val sharedPreferencesService: SharedPreferenceService
 ) : ViewModel() {
 
     private val _signInWithGoogleState = MutableStateFlow(SignInWithGoogleState())
@@ -49,6 +54,12 @@ class LoginViewModel @Inject constructor(
 
     private val _appUser = mutableStateOf(AppUser())
     val appUser: State<AppUser> = _appUser
+
+    private val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+    private val appUserAdapter = moshi.adapter(AppUser::class.java)
 
     var email by mutableStateOf("")
         private set
@@ -85,6 +96,7 @@ class LoginViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     Logger.d("Login with google Success")
+
                     _intentRequestState.value = IntentRequestState(intentSender = it.data)
                 }
 
@@ -162,6 +174,9 @@ class LoginViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     Logger.d("Sign in with intent success,with${it.data?.name}}")
+
+                    val appUserJson = appUserAdapter.toJson(it.data)
+                    sharedPreferencesService.saveData(SharedPrefConsts.APP_USER, appUserJson)
                     _loginWithEmailState.value =
                         LoginWithEmailState(isSignInSuccess = true, appUser = it.data)
 

@@ -41,10 +41,18 @@ class MainActivity : ComponentActivity() {
 
         val sharedPreferenceService = SharedPreferenceServiceImpl(applicationContext)
 
-        val isFirstTime = sharedPreferenceService.getData("isFirstTime", "true")
+        var isFirstTime = ""
+
+        lifecycleScope.launch {
+            isFirstTime = sharedPreferenceService.getData("isFirstTime", "true")
+
+        }
+
+
 
         setContent {
             val oneTapClient = Identity.getSignInClient(applicationContext)
+
             FoundItTheme {
                 // A surface container using the 'background' color from the theme
 
