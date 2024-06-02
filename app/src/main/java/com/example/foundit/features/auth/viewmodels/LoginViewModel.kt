@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.orhanobut.logger.Logger
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -56,7 +57,7 @@ class LoginViewModel @Inject constructor(
     val appUser: State<AppUser> = _appUser
 
     private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
+        .addLast(KotlinJsonAdapterFactory())
         .build()
 
     private val appUserAdapter = moshi.adapter(AppUser::class.java)
