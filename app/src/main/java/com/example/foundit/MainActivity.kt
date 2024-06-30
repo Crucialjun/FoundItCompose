@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +27,7 @@ import com.example.foundit.features.onboarding.OnboardingScreen
 import com.example.foundit.features.profile_setup.views.ProfileSetupView
 import com.example.foundit.services.shared_preferences_service.SharedPreferenceServiceImpl
 import com.example.foundit.ui.theme.FoundItTheme
+import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.identity.Identity
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -35,6 +37,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    val LocalFacebookCallbackManager =
+        staticCompositionLocalOf<CallbackManager> { error("No CallbackManager provided") }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.addLogAdapter(AndroidLogAdapter())
@@ -47,6 +51,10 @@ class MainActivity : ComponentActivity() {
             isFirstTime = sharedPreferenceService.getData("isFirstTime", "true")
 
         }
+
+
+
+
 
 
 
