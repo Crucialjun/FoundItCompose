@@ -1,4 +1,4 @@
-package com.example.foundit.features.auth.viewmodels
+package com.example.foundit.features.auth.presentation.viewmodels
 
 
 import android.util.Log
@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.foundit.core.app.Resource
 import com.example.foundit.features.auth.domain.params.RegisterWithEmailParams
 import com.example.foundit.features.auth.domain.usecases.RegisterWithEmailUsecase
-import com.example.foundit.features.auth.states.RegisterState
+import com.example.foundit.features.auth.presentation.states.RegisterState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

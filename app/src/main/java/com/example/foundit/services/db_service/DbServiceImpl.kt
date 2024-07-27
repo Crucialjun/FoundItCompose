@@ -18,6 +18,28 @@ class DbServiceImpl : DbService {
         }
     }
 
+    override suspend fun updateUserProfile(
+        fullName: String,
+        username: String,
+        phoneNumber: String,
+        uid: String
+    ): AppUser? {
+        try {
+            val user = db.collection("users").document(uid).get().await()
+            val appUser = user.toObject(AppUser::class.java)
+            appUser?.let {
+                appUser.name = fullName
+                appUser.username = username
+                appUser.phoneNumber = phoneNumber
+                db.collection("users").document(uid).set(appUser)
+                return appUser
+            }
+            return null
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
     override suspend fun retrieveAppUserFromDb(uid: String): AppUser? {
         try {
             val user = db.collection("users").document(uid).get().await()

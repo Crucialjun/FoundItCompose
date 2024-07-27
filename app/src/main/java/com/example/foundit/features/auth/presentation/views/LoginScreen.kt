@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foundit.R
-import com.example.foundit.features.auth.viewmodels.LoginViewModel
+import com.example.foundit.features.auth.presentation.viewmodels.LoginViewModel
 import com.example.foundit.utils.CustomDialog
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback

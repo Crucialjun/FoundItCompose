@@ -19,9 +19,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.foundit.core.app.models.AppUser
+import com.example.foundit.core.constants.shared_pref.SharedPrefConsts
+import com.example.foundit.features.auth.presentation.viewmodels.LoginViewModel
 import com.example.foundit.features.auth.presentation.views.LoginScreen
 import com.example.foundit.features.auth.presentation.views.SignupScreen
-import com.example.foundit.features.auth.viewmodels.LoginViewModel
 import com.example.foundit.features.home.views.HomepageScreen
 import com.example.foundit.features.onboarding.OnboardingScreen
 import com.example.foundit.features.profile_setup.views.ProfileSetupView
@@ -31,6 +33,8 @@ import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.identity.Identity
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -47,8 +51,23 @@ class MainActivity : ComponentActivity() {
 
         var isFirstTime = ""
 
+        var appUser: AppUser? = null
+
         lifecycleScope.launch {
             isFirstTime = sharedPreferenceService.getData("isFirstTime", "true")
+
+            val moshi = Moshi.Builder()
+                .addLast(KotlinJsonAdapterFactory())
+                .build()
+
+            val appUserAdapter = moshi.adapter(AppUser::class.java)
+
+
+            val appUserjson = sharedPreferenceService.getData(SharedPrefConsts.APP_USER, "")
+
+            appUser = if (appUserjson == "") null else appUserAdapter.fromJson(appUserjson)
+
+            Logger.d("App user is $appUser")
 
         }
 
@@ -74,7 +93,7 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = if (isFirstTime == "true") "onboarding" else "auth"
+                        startDestination = if (isFirstTime == "true") "onboarding" else if (appUser == null) "auth" else if (appUser!!.phoneNumber.isEmpty()) "profile_setup" else "home"
                     ) {
                         navigation(
                             startDestination = "onboarding_screen",
@@ -90,7 +109,7 @@ class MainActivity : ComponentActivity() {
                             route = "auth"
                         ) {
                             composable("login") {
-                                val viewModel :LoginViewModel = hiltViewModel()
+                                val viewModel: LoginViewModel = hiltViewModel()
                                 val launcher = rememberLauncherForActivityResult(
                                     contract = ActivityResultContracts.StartIntentSenderForResult(),
                                     onResult = { result ->

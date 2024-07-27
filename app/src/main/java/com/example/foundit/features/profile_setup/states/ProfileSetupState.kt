@@ -5,5 +5,6 @@ import com.example.foundit.core.app.models.AppUser
 data class ProfileSetupState(
     val isLoading: Boolean = false,
     val error: String? = null,
-    val appUser: AppUser? = null
+    val appUser: AppUser? = null,
+    val isProfileSetupSuccess: Boolean = false
 )

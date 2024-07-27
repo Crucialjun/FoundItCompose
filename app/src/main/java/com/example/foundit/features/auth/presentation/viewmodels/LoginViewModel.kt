@@ -1,4 +1,4 @@
-package com.example.foundit.features.auth.viewmodels
+package com.example.foundit.features.auth.presentation.viewmodels
 
 import android.content.Intent
 import android.util.Log
@@ -18,9 +18,9 @@ import com.example.foundit.features.auth.domain.params.LoginWithIntentParams
 import com.example.foundit.features.auth.domain.usecases.LoginWithEmailUsecase
 import com.example.foundit.features.auth.domain.usecases.LoginWithGoogleUseCase
 import com.example.foundit.features.auth.domain.usecases.SignInWithIntentUseCase
-import com.example.foundit.features.auth.states.IntentRequestState
-import com.example.foundit.features.auth.states.LoginWithEmailState
-import com.example.foundit.features.auth.states.SignInWithGoogleState
+import com.example.foundit.features.auth.presentation.states.IntentRequestState
+import com.example.foundit.features.auth.presentation.states.LoginWithEmailState
+import com.example.foundit.features.auth.presentation.states.SignInWithGoogleState
 import com.example.foundit.services.shared_preferences_service.SharedPreferenceService
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseUser

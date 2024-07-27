@@ -5,6 +5,10 @@ import com.example.foundit.features.auth.data.datasources.AuthDataSource
 import com.example.foundit.features.auth.data.datasources.AuthDataSourceImp
 import com.example.foundit.features.auth.data.repository.AuthRepository
 import com.example.foundit.features.auth.data.repository.AuthRepositoryImp
+import com.example.foundit.features.profile_setup.data.data_source.remote_data_source.ProfileSetupRemoteDataSource
+import com.example.foundit.features.profile_setup.data.data_source.remote_data_source.ProfileSetupRemoteDataSourceImpl
+import com.example.foundit.features.profile_setup.data.respository.ProfileSetupRepositoryImpl
+import com.example.foundit.features.profile_setup.domain.repository.ProfileSetupRepository
 import com.example.foundit.services.auth_service.AuthService
 import com.example.foundit.services.auth_service.AuthServiceImpl
 import com.example.foundit.services.db_service.DbService
@@ -37,6 +41,27 @@ class AppModule {
     ): AuthDataSource {
         return AuthDataSourceImp(
             authService,dbService
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileSetupRemoteDataSource(
+
+        dbService: DbService
+    ): ProfileSetupRemoteDataSource {
+        return ProfileSetupRemoteDataSourceImpl(
+            dbService = dbService,
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileSetupRepository(
+        profileSetupRemoteDataSource: ProfileSetupRemoteDataSource
+    ): ProfileSetupRepository {
+        return ProfileSetupRepositoryImpl(
+            remoteDataSource = profileSetupRemoteDataSource
         )
     }
 
